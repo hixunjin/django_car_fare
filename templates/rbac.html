@@ -1,0 +1,74 @@
+<style>
+    .menu-title {
+        color: #ecf0f1;
+        font-size: 15px;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .menu-title:hover {
+        background-color: #34495e;
+    }
+
+    .menu-arrow {
+        transition: transform 0.3s ease;
+    }
+
+    .menu-expanded .menu-arrow {
+        transform: rotate(90deg);
+    }
+
+    .submenu {
+        display: none;
+        padding-left: 10px;
+    }
+
+    .submenu a {
+        padding-left: 30px;
+    }
+
+    .submenu-active {
+        display: block;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('.menu-title').on('click', function () {
+            const $parentLi = $(this).closest('li');
+            const $submenu = $parentLi.find('.submenu');
+
+            // 切换箭头方向和子菜单显示
+            $submenu.slideToggle(200);
+            $parentLi.toggleClass('menu-expanded');
+        });
+
+        // 页面加载时展开当前 active 菜单
+        $('.submenu').each(function () {
+            if ($(this).find('.active').length > 0) {
+                $(this).show();
+                $(this).closest('li').addClass('menu-expanded');
+            }
+        });
+    });
+</script>
+
+{% for item in menu_result.values %}
+    <li class="{% if item.active %}menu-expanded{% endif %}">
+        <div class="menu-title">
+            <span>{{ item.menu_title }}</span>
+            <span class="menu-arrow glyphicon glyphicon-chevron-right"></span>
+        </div>
+        <ul class="nav nav-sidebar submenu {% if item.active %}submenu-active{% endif %}">
+            {% for child in item.children %}
+                <li class="{% if child.active %}active{% endif %}">
+                    <a href="{{ child.url }}" class="menu-link">{{ child.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endfor %}

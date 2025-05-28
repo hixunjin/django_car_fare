@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block page_content %}
+
+    <div class="col-md-offset-1 col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">登录用户分配到部门</div>
+            <div class="panel-body">
+                <form class="form-horizontal" method="post" action="">
+                    {% csrf_token %}
+                    <!--用 type 值为 hidden的  input 标签保存指定id记录，修改时，定位要修改表中的哪条记录-->
+                    <input type="hidden" name="id"  value="{{obj.id}}">
+
+                    <!--账号信息
+                    应该知道，这里仅仅是修改用户的部门信息，并不能修改用户的自身信息--->
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="username">账号</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" id=username" name="username"
+                                value="{{obj.username}}" disabled>  <!-- disabled ，不可编辑-->
+                        </div>
+                    </div>
+
+
+                    <!--姓名--->
+
+
+                    <div class="form-group">
+                        <label for="nickname" class="col-md-2 control-label">姓名</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" id="nickname" name="nickname" value="{{ obj.nickname }}"
+                            disabled>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--邮箱--->
+                    <div class="form-group">
+                        <label for="email" class="col-md-2 control-label">邮箱</label>
+
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" id="email" name="email" value="{{ obj.email }}"
+                            disabled>
+                        </div>
+                    </div>
+
+
+
+                    <!--部门信息修改--->
+                    <div class="form-group">
+                        <label for="dep_id" class="col-md-2 control-label">部门名称</label>
+
+
+
+                        <!--总结一下这个select标签-->
+                        <div class="col-md-8">
+                            <select class="form-group" id="dep_id" name="dep_id" >
+                                <!--编写for循环给 <option> 标签赋值-->
+                                {% for dep in dep_list %}
+                                    {% if obj.loguser.dep_id == dep.id %}
+                                        <option value="{{ dep.id }}" selected>{{ dep.dep_name }}</option>
+
+                                        {% else %}
+                                        <option value="{{ dep.id }}">{{ dep.dep_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- 保存 -->
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8">
+                            <button class="btn btn-primary" type="submit">保存</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

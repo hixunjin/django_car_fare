@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+{% block page_content %}
+
+
+    <div class="col-md-offset-1" align="center">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">车辆信息增加</div>
+            <div class="panel-body">
+
+                <form class="form-horizontal" method="post" action="">
+                    {% csrf_token %}
+
+
+                    <!--车牌号--->
+                    <div class="form-group">
+                        <label for="plate_number">车牌号</label>
+
+                        <div>
+                            <input class="form-control" type="text" id="plate_number" name="plate_number" placeholder="车牌号">
+                        </div>
+                    </div>
+
+
+                    <!--司机--->
+
+
+                    <div class="form-group">
+                        <label for="driver">司机</label>
+
+                        <div>
+                            <input class="form-control" type="text" id="driver" name="driver" placeholder="司机">
+                        </div>
+                    </div>
+
+
+                    <!--单价
+                    注意前端输入的网页数据要和后端数据库中的数据表类型一致-->
+
+                    <div class="form-group">
+                        <label for="price">单价</label>
+
+                        <div>
+                            <input class="form-control" type="number" id="price" name="price" placeholder="单价">
+                        </div>
+                    </div>
+
+                    <!--备注说明-->
+
+
+                    <div class="form-group">
+                        <label for="remarks">备注</label>
+
+                        <div class="form-control">
+                            <input type="text" id="remarks" name="remarks" placeholder="备注">
+                        </div>
+                    </div>
+
+
+                    <!--增加按钮-->
+
+
+                    <div class="form-group">
+                        <div>
+                            <button type="submit">增加</button>
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+
+
+
+            </div>
+            <!--调用自定义模板标签，返回最新发表的文章-->
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+</body>
+
+</html>

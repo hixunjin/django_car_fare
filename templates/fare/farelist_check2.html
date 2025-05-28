@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+<!-- 主面板 -->
+<div class="panel panel-primary">
+    <div class="panel-heading">车费取消</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10" style="margin-bottom: 15px;">
+
+                <!-- 查询表单 -->
+                <form class="form-inline" method="post" action="/fare/farecheck2/">
+                    {% csrf_token %}
+
+                    <!-- 起始时间 -->
+                    <div class="form-group">
+                        <label for="drive_data1">乘车时间 从:</label>
+                        <input class="form-control" type="date" id="drive_data1" name="drive_data1"
+                               value="{{ conditions.drive_date__gte }}">
+                    </div>
+
+                    <!-- 结束时间 -->
+                    <div class="form-group">
+                        <label for="drive_data2">至:</label>
+                        <input class="form-control" type="date" id="drive_data2" name="drive_data2"
+                               value="{{ conditions.drive_date__lte }}">
+                    </div>
+
+                    <!-- 用车部门选择 -->
+                    <div class="form-group">
+                        <label for="department">用车部门:</label>
+                        <select class="form-control" id="department" name="department">
+                            <option value="">-----------</option>
+                            {% for dep in dep_list %}
+                                <option value="{{ dep.id }}" {% if dep.id == conditions.dep_id %}selected{% endif %}>
+                                    {{ dep.dep_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- 查询按钮 -->
+                    &nbsp;&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search"></i> 查询
+                    </button>
+
+                    <!-- 取消车费按钮，触发模态框 -->
+                    &nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModel">
+                        <i class="fa fa-times-circle"></i> 取消车费
+                    </button>
+                </form>
+
+                <!-- 车费记录表格 -->
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <!-- 全选复选框 -->
+                        <th class="bg-info">
+                            <input type="checkbox" id="allrow" onclick="checkallow()" style="height:20px;width:60px">
+                        </th>
+                        <th class="bg-info text-center">用车部门</th>
+                        <th class="bg-info text-center">乘车人</th>
+                        <th class="bg-info text-center">车牌号</th>
+                        <th class="bg-info text-center">司机</th>
+                        <th class="bg-info text-center">单价</th>
+                        <th class="bg-info text-center">公里数</th>
+                        <th class="bg-info text-center">车费</th>
+                        <th class="bg-info text-center">乘车时间</th>
+                        <th class="bg-info text-center">乘车说明</th>
+                        <th class="bg-info text-center">输入人员</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in fare_list %}
+                        <tr>
+                            <!-- 每条记录的选择框，绑定 rowid -->
+                            <td>
+                                <input type="checkbox" name="farecheck" rowid="{{ row.id }}" style="height:20px;width:60px">
+                            </td>
+                            <td>{{ row.dep.dep_name }}</td>
+                            <td>{{ row.passenger }}</td>
+                            <td>{{ row.car.plate_number }}</td>
+                            <td>{{ row.car.driver }}</td>
+                            <td class="text-right">{{ row.car.price }}</td>
+                            <td class="text-right">{{ row.distance }}</td>
+                            <td class="text-right">{{ row.fare }}</td>
+                            <td>{{ row.derve_date|date:'Y-m-d' }}</td>
+                            <td>{{ row.remarks }}</td>
+                            <td>{{ row.operator }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- 分页导航 -->
+                <nav align="center" aria-label="Page navigation">
+                    <ul class="pagination">
+                        {{ page_nav|safe }}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- 模态框：确认取消操作 -->
+        <div class="modal fade" id="myModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">取消提示</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框正文 -->
+                    <div class="modal-body">
+                        <p id="mess">你确定要取消当前车费申请吗？</p>
+                        <!-- 用于临时存储选中的 rowid -->
+                        <input type="hidden" id="rowid">
+                    </div>
+
+                    <!-- 模态框底部按钮 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-danger" onclick="approve_ok()">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JS 脚本 -->
+        <script>
+            // 全选或取消全选所有复选框
+            function checkallow() {
+                var rows = $('input[name="farecheck"]');
+                $("#allrow").is(':checked') ? rows.prop("checked", true) : rows.prop("checked", false);
+            }
+
+            // 获取所有被选中的行的 rowid，返回逗号分隔的字符串
+            function ids_str() {
+                var ids = [];
+                var vchecks = $('tbody').find('input:checked');
+                if (vchecks.length == 0) return 'no_row';
+                $(vchecks).each(function () {
+                    ids.push($(this).attr('rowid'));
+                });
+                return ids.join(',');
+            }
+
+            // 当模态框显示时，判断是否有选中记录
+            $("#myModel").on('show.bs.modal', function () {
+                var ids = ids_str();
+                var modal = $(this);
+                if (ids === 'no_row') {
+                    modal.find('#mess').text("无记录选中！");
+                    modal.find('#rowid').val('');
+                } else {
+                    modal.find('#mess').text("确定将选中的记录取消吗？");
+                    modal.find('#rowid').val(ids);
+                }
+            });
+
+            // 模态框点击“确定”按钮时，发送取消请求
+            function approve_ok() {
+                var rowid = $('#rowid').val();
+                if (rowid === '') {
+                    $('#myModel').modal('hide');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/fare/farecheck2/' + rowid + '/',
+                    type: 'GET',
+                    success: function (data) {
+                        if (data.status) {
+                            $("#mess").text("车费取消成功，页面即将刷新！")
+
+
+                             // 延迟2秒关闭模态框并刷新
+                setTimeout(function () {
+                    $('#myModel').modal('hide');
+                     $('#myModel').modal('hide');
+                    location.reload();  // 刷新页面
+                }, 2000);
+
+
+                        } else {
+                            alert("取消失败: " + data.message);
+                        }
+                    },
+                    error: function () {
+                        alert("请求失败，请检查网络或联系管理员。");
+                    }
+                });
+            }
+        </script>
+    </div>
+</div>
+
+{% endblock %}

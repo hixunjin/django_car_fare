@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+    {% block page_content %}
+
+    <div class="col-md-offset-1 col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">车辆信息修改</div>
+            <div class="panel-body">
+
+                <form class="form-horizontal" method="post" action="">
+                    {% csrf_token %}
+                    <!--用 type 值为 hidden的  input 标签保存指定id记录，修改时，定位要修改表中的哪条记录-->
+                    <input class="form-control"  type="hidden" name="id" id="id" value="{{car_obj.id}}">
+
+                    <!--车牌号--->
+                    <div align="center" class="form-group">
+                        <label for="plate_number">车牌号</label>
+
+                        <div>
+                            <input class="form-control" type="text" id="plate_number" name="plate_number" placeholder="车牌号"
+                                value="{{car_obj.plate_number}}">
+                        </div>
+                    </div>
+
+
+                    <!--司机--->
+
+
+                    <div align="center" class="form-group">
+                        <label for="driver">司机</label>
+
+
+                        <!--我们在访问的时候，使用 --->
+                        <div>
+                            <input class="form-control" type="text" id="driver" name="driver" placeholder="司机" value="{{ car_obj.driver }}">
+                        </div>
+                    </div>
+
+
+                    <!--单价
+                    注意前端输入的网页数据要和后端数据库中的数据表类型一致-->
+
+                    <div align="center" class="form-group">
+                        <label for="price">单价</label>
+
+                        <div>
+                            <input class="form-control" type="number" id="price" name="price" placeholder="单价" value="{{ car_obj.price }}">
+                        </div>
+                    </div>
+
+                    <!--备注说明-->
+
+
+                    <div align="center" class="form-group">
+                        <label for="remarks">备注</label>
+
+                        <div>
+                            <input  class="form-control" type="text" id="remarks" name="remarks" placeholder="备注"
+                                value="{{ car_obj.remarks }}">
+                        </div>
+                    </div>
+
+                    <div align="center" class="form-group">
+                        <div>
+                            <button type="submit">保存</button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    {% endblock %}
+
+
+
+
+
+
+</body>
+
+</html>

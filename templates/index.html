@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+{% block page_content %}
+
+
+    <div class="jumbotron">
+        <h3>
+            你好，管理员
+        </h3>
+        <p>祝你工作愉快！</p>
+        <div id="cur_time"></div>
+        <p><a class="btn btn-primary btn-lg" role="button" >开始工作</a></p>
+
+
+    </div>
+
+
+     <script>
+    // 获取当前日期和时间
+        function updateDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString(); // 获取日期
+            const time = now.toLocaleTimeString(); // 获取时间
+
+            // 更新页面中的元素
+            document.getElementById('cur_time').innerHTML = `今天是 ${date}<br>北京时间: ${time}`;
+        }
+
+        // 每秒钟更新一次日期和时间
+        setInterval(updateDateTime, 1000);
+    </script>
+
+{% endblock %}
+
+
+
+</body>
+</html>
