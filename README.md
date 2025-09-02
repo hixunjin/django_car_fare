@@ -1,11 +1,12 @@
 一、项目简介
 本项目是基于Django开发的一个车费管理系统，实现对公司车费信息的管理
+
 二、技术栈
-后端:Django + Mysql + Rbac 管理模块 +  Whoosh 搜索框架
+后端:Django + Mysql + Rbac 管理模块 +  Whoosh 搜索框架 + RBAC 管理模块
 
 前端:Bootstrap 框架
 
-后台
+后台页面
 
 ![admin1](https://github.com/user-attachments/assets/28839607-a0c4-4e13-a8f1-f292732adfaa)
 
@@ -16,7 +17,7 @@
 ![admin3](https://github.com/user-attachments/assets/f79b5bcc-fd27-4821-8362-26a37334f2cc)
 
 
-客户端
+客户端页面
 
 ![image](https://github.com/user-attachments/assets/9cc3a4f3-33ac-4a00-92dc-a3c6eb13ef1e)
 
