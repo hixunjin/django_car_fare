@@ -2,7 +2,7 @@
 本项目是基于Django开发的一个车费管理系统，实现对公司车费信息的管理
 
 二、技术栈
-后端:Django + Mysql + Rbac 管理模块 +  Whoosh 搜索框架 + RBAC 管理模块
+后端:Django + Mysql + Rbac 管理模块 +  Whoosh 搜索框架
 
 前端:Bootstrap 框架
 
