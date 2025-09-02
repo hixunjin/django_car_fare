@@ -1,4 +1,5 @@
-本项目是用Django开发的一个车费管理系统，前端采用 BootStrap 框架
+一、项目简介
+本项目是基于Django开发的一个车费管理系统，前端采用 BootStrap 框架
 技术栈
 后端:Django + Mysql + Rbac 管理模块 +  Whoosh 搜索框架
 
